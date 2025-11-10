@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>📚 Book Manager</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- En-tête -->
+      <header>
+        <h1>📚 Book Manager</h1>
+        <p>Gérez votre bibliothèque personnelle</p>
+      </header>
+
+      <!-- Barre de statistiques -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="number" id="stat-total">0</div>
+          <div class="label">Livres</div>
+        </div>
+        <div class="stat-item">
+          <div class="number" id="stat-oldest">-</div>
+          <div class="label">Plus ancien</div>
+        </div>
+        <div class="stat-item">
+          <div class="number" id="stat-newest">-</div>
+          <div class="label">Plus récent</div>
+        </div>
+      </div>
+
+      <!-- Contenu principal -->
+      <div class="main-content">
+        <!-- Formulaire d'ajout -->
+        <div class="card">
+          <h2>➕ Ajouter un livre</h2>
+          <div id="form-error" class="error-message"></div>
+          <div id="form-success" class="success-message"></div>
+          <form id="add-book-form">
+            <div class="form-group">
+              <label for="title">Titre</label>
+              <input type="text" id="title" required />
+            </div>
+            <div class="form-group">
+              <label for="author">Auteur</label>
+              <input type="text" id="author" required />
+            </div>
+            <div class="form-group">
+              <label for="year">Année de publication</label>
+              <input type="number" id="year" min="1000" max="2025" required />
+            </div>
+            <div class="form-group">
+              <label for="rating">Note (1-5) - Optionnel</label>
+              <input type="number" id="rating" min="1" max="5" />
+            </div>
+            <button type="submit" class="btn">Ajouter le livre</button>
+          </form>
+        </div>
+
+        <!-- Liste des livres -->
+        <div class="card">
+          <h2>📖 Ma bibliothèque</h2>
+          <div class="search-bar">
+            <input
+              type="text"
+              id="search-input"
+              placeholder="🔍 Rechercher un livre..."
+            />
+          </div>
+          <div id="books-list">
+            <div class="loading">Chargement...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal d'édition -->
+    <div id="edit-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>✏️ Modifier le livre</h2>
+          <button class="close-modal" onclick="closeEditModal()">
+            &times;
+          </button>
+        </div>
+        <div id="edit-error" class="error-message"></div>
+        <form id="edit-book-form">
+          <input type="hidden" id="edit-id" />
+          <div class="form-group">
+            <label for="edit-title">Titre</label>
+            <input type="text" id="edit-title" required />
+          </div>
+          <div class="form-group">
+            <label for="edit-author">Auteur</label>
+            <input type="text" id="edit-author" required />
+          </div>
+          <div class="form-group">
+            <label for="edit-year">Année</label>
+            <input
+              type="number"
+              id="edit-year"
+              min="1000"
+              max="2025"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit-rating">Note (1-5)</label>
+            <input type="number" id="edit-rating" min="1" max="5" />
+          </div>
+          <button type="submit" class="btn">Enregistrer</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
