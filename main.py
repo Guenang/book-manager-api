@@ -36,7 +36,7 @@ app = FastAPI(
 
 # Configuration CORS
 allowed_origins = ["*"] if not IS_PRODUCTION else [
-    "https://votre-frontend.com",  # Vous mettrez l'URL réelle plus tard
+    "https://book-manager-frontend-rouge.vercel.app",  # Vous mettrez l'URL réelle plus tard
     "http://localhost:8000",
 ]
 
