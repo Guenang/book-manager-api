@@ -55,6 +55,8 @@ htmlcov/
 # === Jupyter / Notebooks ===
 .ipynb_checkpoints/
 
+#bd local
+*.db
 # === Autres (optionnel) ===
 # ajouter ici des fichiers spécifiques à ton projet
 # exemple : data/, output/, tmp/, etc.
