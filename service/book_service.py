@@ -1,13 +1,17 @@
+"""
+Service métier pour gérer les livres.
+Dépend de l'INTERFACE IBookRepository, pas d'une implémentation concrète.
+"""
 from typing import List, Optional
 from domain.book import Book
 from domain.exceptions import DuplicateBookError, BookNotFoundError
-from repository.book_repository import BookRepository
+from domain.ports import IBookRepository
 
 
 class BookService:
     """Coordonne les opérations sur les livres."""
     
-    def __init__(self, repository: BookRepository):
+    def __init__(self, repository: IBookRepository):
         self.repository = repository
 
     def create_book(self, title: str, author: str, year: int,  rating: int = None) -> Book:

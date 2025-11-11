@@ -1,11 +1,17 @@
+"""
+Adapter SQLAlchemy pour le repository de livres.
+Implémente l'interface IBookRepository.
+"""
 from typing import List, Optional
 from sqlalchemy.orm import Session
+
 from domain.book import Book
-from infrastructure.models import BookModel
+from domain.ports import IBookRepository
+from adapters.models import BookModel
 
 
-class BookRepository:
-    """Gère le stockage des livres avec SQLAlchemy."""
+class SQLAlchemyBookRepository(IBookRepository):
+    """Implémentation SQLAlchemy du repository de livres."""
     
     def __init__(self, db: Session):
         self.db = db
@@ -20,9 +26,8 @@ class BookRepository:
         )
         self.db.add(db_book)
         self.db.commit()
-        self.db.refresh(db_book)  # Récupère l'ID généré
+        self.db.refresh(db_book)
         
-        # Met à jour l'objet domain avec l'ID
         book.id = db_book.id
         return book
 
@@ -37,12 +42,12 @@ class BookRepository:
         return db_book.to_domain() if db_book else None
     
     def find_by_title(self, search_term: str) -> List[Book]:
-        """Trouve des livres par titre (recherche partielle)."""
+        """Trouve des livres par titre."""
         if not search_term:
             return []
         
         db_books = self.db.query(BookModel).filter(
-            BookModel.title.ilike(f"%{search_term}%")  # ilike = case insensitive
+            BookModel.title.ilike(f"%{search_term}%")
         ).all()
         return [db_book.to_domain() for db_book in db_books]
 
@@ -70,7 +75,7 @@ class BookRepository:
             db_book.title = book.title
             db_book.author = book.author
             db_book.year = book.year
-            db_book.rating = book.rating 
+            db_book.rating = book.rating
             self.db.commit()
             self.db.refresh(db_book)
             return db_book.to_domain()

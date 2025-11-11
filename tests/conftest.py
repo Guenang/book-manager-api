@@ -7,7 +7,7 @@ from sqlalchemy.pool import StaticPool
 
 # Imports de votre application
 from main import app
-from infrastructure.database import Base, get_db
+from adapters.database import Base, get_db
 
 # Indiquer qu'on est en mode test
 os.environ["TESTING"] = "1"

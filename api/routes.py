@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-from infrastructure.database import get_db
-from repository.book_repository import BookRepository
+from adapters.database import get_db
+from adapters.repositories.sqlalchemy_repository import SQLAlchemyBookRepository  
 from service.book_service import BookService
 from api.schemas import BookCreate, BookUpdate, BookResponse, StatsResponse
 from domain.exceptions import (
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/books", tags=["Books"])
 
 def get_book_service(db: Session = Depends(get_db)) -> BookService:
     """Injection de dépendances pour le service."""
-    repository = BookRepository(db)
+    repository = SQLAlchemyBookRepository(db)
     return BookService(repository)
 
 

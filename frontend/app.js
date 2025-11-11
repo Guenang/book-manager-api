@@ -1,5 +1,5 @@
 // Configuration de l'API
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://book-manager-api-0feo.onrender.com";
 
 // Fonction pour afficher les messages
 function showMessage(elementId, message, duration = 3000) {
