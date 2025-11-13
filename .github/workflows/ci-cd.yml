@@ -33,13 +33,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest pytest-cov
-      
-      - name: Debug: list installed packages
-        run: |
-          python -m pip --version
-          pip freeze
-          python -c "import httpx; print('httpx ok', httpx.__version__)"
-          continue-on-error: true
 
       - name: 🧪 Run tests with coverage
         env:
