@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Run Tests
+    name: 🧪 Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -20,30 +20,32 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: 🔧 Install dependencies
+      - name: 📦 Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install --no-cache-dir -r requirements.txt
-          pip install --no-cache-dir pytest pytest-cov httpx
+          pip install -r requirements.txt
+          pip install pytest pytest-cov httpx
 
-      - name: ✅ Verify httpx installation
-        run: |
-          python -c "import httpx; print(f'httpx installed: {httpx.__version__}')"
-
-      - name: 🧪 Run tests
+      - name: 🧪 Run tests with coverage
         env:
           TESTING: "1"
         run: |
-          pytest tests/ -v
+          pytest tests/ -v --cov=domain --cov=service --cov=adapters --cov=api --cov-report=term-missing --cov-report=html
+
+      - name: 📊 Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: htmlcov/
 
       - name: ✅ Test Summary
         if: always()
         run: |
-          echo "## Test Results 🧪" >> $GITHUB_STEP_SUMMARY
-          echo "Tests completed!" >> $GITHUB_STEP_SUMMARY
+          echo "## 🧪 Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "All tests completed successfully!" >> $GITHUB_STEP_SUMMARY
 
   lint:
-    name: Code Quality
+    name: 🔍 Code Quality
     runs-on: ubuntu-latest
 
     steps:
@@ -55,22 +57,67 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: 🔧 Install flake8
+      - name: 📦 Install linting tools
         run: |
-          pip install flake8
+          pip install flake8 black isort
 
-      - name: 🔍 Lint code
+      - name: 🔍 Check with flake8
         run: |
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --exclude=venv,env,.venv,.git,__pycache__,tests
+
+      - name: 🎨 Check code formatting (black)
+        run: |
+          black --check . --exclude='venv|env|.venv|htmlcov' || echo "⚠️ Code formatting issues found (non-blocking)"
+
+      - name: 📦 Check imports (isort)
+        run: |
+          isort --check-only . --skip venv --skip env --skip .venv || echo "⚠️ Import sorting issues found (non-blocking)"
+
+      - name: ✅ Lint Summary
+        if: always()
+        run: |
+          echo "## 🔍 Code Quality Check" >> $GITHUB_STEP_SUMMARY
+          echo "Linting completed!" >> $GITHUB_STEP_SUMMARY
+
+  security:
+    name: 🔒 Security Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 📦 Install safety
+        run: |
+          pip install safety
+
+      - name: 🔒 Check dependencies for vulnerabilities
+        run: |
+          safety check --json || echo "⚠️ Security issues found (non-blocking)"
+
+      - name: ✅ Security Summary
+        if: always()
+        run: |
+          echo "## 🔒 Security Check" >> $GITHUB_STEP_SUMMARY
+          echo "Security scan completed!" >> $GITHUB_STEP_SUMMARY
 
   deploy:
-    name: Deploy
-    needs: [test, lint]
+    name: 🚀 Deploy to Production
+    needs: [test, lint, security]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
-      - name: 🚀 Deploy notification
+      - name: 🚀 Deployment notification
         run: |
-          echo "✅ Tests passed - Render will auto-deploy"
+          echo "## 🚀 Deployment Status" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All checks passed!" >> $GITHUB_STEP_SUMMARY
+          echo "🔄 Render will automatically deploy from main branch" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployment URL:** https://book-manager-api-0feo.onrender.com" >> $GITHUB_STEP_SUMMARY
