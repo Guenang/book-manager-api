@@ -157,3 +157,12 @@ Thumbs.db
 
 \*.log
 ```
+
+# 📚 Book Manager API
+
+![Tests](https://github.com/Guenang/book-manager-api/actions/workflows/ci-cd.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.12-blue.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green.svg)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+
+> API REST moderne avec architecture hexagonale pour gérer une bibliothèque de livres
